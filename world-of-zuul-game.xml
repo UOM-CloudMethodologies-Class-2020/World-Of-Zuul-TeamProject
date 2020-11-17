@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="world-of-zuul-game" default="all">
+
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+    <property name="skip.tests" value="true"/>
+     -->
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="700m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/*.hprof/**"/>
+        <exclude name="**/*.pyc/**"/>
+        <exclude name="**/*.pyo/**"/>
+        <exclude name="**/*.rbc/**"/>
+        <exclude name="**/*.yarb/**"/>
+        <exclude name="**/*~/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.git/**"/>
+        <exclude name="**/.hg/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/__pycache__/**"/>
+        <exclude name="**/_svn/**"/>
+        <exclude name="**/vssver.scc/**"/>
+        <exclude name="**/vssver2.scc/**"/>
+    </patternset>
+    <patternset id="library.patterns">
+        <include name="*.egg"/>
+        <include name="*.zip"/>
+        <include name="*.war"/>
+        <include name="*.swc"/>
+        <include name="*.ear"/>
+        <include name="*.jar"/>
+        <include name="*.klib"/>
+        <include name="*.ane"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <exclude name="**/?*.java"/>
+        <exclude name="**/?*.form"/>
+        <exclude name="**/?*.class"/>
+        <exclude name="**/?*.groovy"/>
+        <exclude name="**/?*.scala"/>
+        <exclude name="**/?*.flex"/>
+        <exclude name="**/?*.kt"/>
+        <exclude name="**/?*.clj"/>
+        <exclude name="**/?*.aj"/>
+    </patternset>
+
+    <!-- Modules -->
+
+
+    <!-- Module World Of Zuul Game -->
+
+    <dirname property="module.world_of_zuul_game.basedir" file="world-of-zuul-game.xml"/>
+
+
+    <property name="compiler.args.world_of_zuul_game" value="-encoding UTF-8 -source 14 -target 14 ${compiler.args}"/>
+
+    <property name="world_of_zuul_game.output.dir"
+              value="${module.world_of_zuul_game.basedir}/out/production/World Of Zuul TeamProject"/>
+    <property name="world_of_zuul_game.testoutput.dir"
+              value="${module.world_of_zuul_game.basedir}/out/test/World Of Zuul TeamProject"/>
+
+    <path id="classpath.test">
+        <pathelement location="../World-Of-Zuul-TeamProject/lib/junit-4.13.1.jar"/>
+        <pathelement location="../World-Of-Zuul-TeamProject/lib/hamcrest-core-1.3.jar"/>
+        <pathelement location="${world_of_zuul_game.output.dir}"/>
+    </path>
+    <path id="world_of_zuul_game.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="world_of_zuul_game.module.production.classpath"/>
+
+    <path id="world_of_zuul_game.runtime.production.module.classpath">
+        <pathelement location="${world_of_zuul_game.output.dir}"/>
+    </path>
+
+    <path id="world_of_zuul_game.module.classpath">
+        <pathelement location="${world_of_zuul_game.output.dir}"/>
+    </path>
+
+    <path id="world_of_zuul_game.runtime.module.classpath">
+        <pathelement location="${world_of_zuul_game.testoutput.dir}"/>
+        <pathelement location="${world_of_zuul_game.output.dir}"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.world_of_zuul_game">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.world_of_zuul_game">
+        <patternset refid="excluded.from.module.world_of_zuul_game"/>
+    </patternset>
+
+    <path id="world_of_zuul_game.module.sourcepath">
+        <dirset dir="${module.world_of_zuul_game.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.world_of_zuul_game"
+            depends="compile.module.world_of_zuul_game.production,compile.module.world_of_zuul_game.tests"
+            description="Compile module World Of Zuul Game"/>
+
+    <target name="compile.module.world_of_zuul_game.production"
+            description="Compile module World Of Zuul Game; production classes">
+        <mkdir dir="${world_of_zuul_game.output.dir}"/>
+        <javac destdir="${world_of_zuul_game.output.dir}" debug="${compiler.debug}"
+               nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.world_of_zuul_game}"/>
+            <bootclasspath refid="world_of_zuul_game.module.bootclasspath"/>
+            <classpath refid="world_of_zuul_game.module.production.classpath"/>
+            <src refid="world_of_zuul_game.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.world_of_zuul_game"/>
+        </javac>
+
+        <copy todir="${world_of_zuul_game.output.dir}">
+            <fileset dir="${module.world_of_zuul_game.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.world_of_zuul_game.tests" depends="compile.module.world_of_zuul_game.production"
+            description="compile module World Of Zuul Game; test classes" unless="skip.tests">
+        <mkdir dir="${world_of_zuul_game.testoutput.dir}"/>
+        <javac srcdir="${module.world_of_zuul_game.basedir}/tests" destdir="${world_of_zuul_game.testoutput.dir}"
+               includeantruntime="false">
+            <classpath refid="classpath.test"/>
+        </javac>
+    </target>
+
+    <target name="tests" depends="compile.module.world_of_zuul_game.tests">
+        <junit printsummary="on" haltonfailure="yes" fork="true">
+            <classpath>
+                <path refid="classpath.test"/>
+                <pathelement location="${world_of_zuul_game.testoutput.dir}"/>
+            </classpath>
+            <formatter type="brief" usefile="false"/>
+            <batchtest>
+                <fileset dir="${module.world_of_zuul_game.basedir}/tests" includes="**/*Tests.java"/>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="clean.module.world_of_zuul_game" description="cleanup module">
+        <delete dir="${world_of_zuul_game.output.dir}"/>
+        <delete dir="${world_of_zuul_game.testoutput.dir}"/>
+    </target>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.world_of_zuul_game" description="cleanup all"/>
+
+    <target name="build.modules" depends="init, clean, compile.module.world_of_zuul_game, tests"
+            description="build all modules"/>
+
+    <target name="all" depends="build.modules" description="build all"/>
+</project>
